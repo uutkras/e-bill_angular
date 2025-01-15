@@ -1,0 +1,24 @@
+<div class="login-container">
+  <h1>Login</h1>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <label for="userId">User ID</label>
+    <input 
+      type="text" 
+      id="userId" 
+      formControlName="userId" 
+      required>
+    <div class="error-message">{{ getErrorMessage('userId') }}</div>
+
+    <label for="password">Password</label>
+    <input 
+      type="password" 
+      id="password" 
+      formControlName="password" 
+      required>
+    <div class="error-message">{{ getErrorMessage('password') }}</div>
+
+    <button type="submit" class="btn" [disabled]="!loginForm.valid">Login</button>
+    <div class="error-message" *ngIf="loginError">Invalid User ID or Password</div>
+    <button type="button" class="btn" routerLink="/register">Register Yourself</button>
+  </form>
+</div>

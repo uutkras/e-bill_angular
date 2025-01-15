@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick EBill</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+<!--    <header>-->
+<!--      <h1>Quick EBill</h1>-->
+<!--      <nav>-->
+<!--        <ul>-->
+<!--          <li><a href="#">Home</a></li>-->
+<!--          <li><a href="#">Pay Bill</a></li>-->
+<!--          <li><a href="#">Register Complaint</a></li>-->
+<!--          <li><a href="#">Complaint Status</a></li>-->
+<!--        </ul>-->
+<!--      </nav>-->
+<!--      <div class="logout-section">-->
+<!--        <span>Welcome CustName</span>-->
+<!--        <button class="logout-btn">Logout</button>-->
+<!--      </div>-->
+<!--    </header>-->
+    <main>
+      <h2>Payment Screen</h2>
+      <div class="payment-method">
+        <h3>Pay by Credit Card</h3>
+        <div class="card-icons">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" class="card-icon">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Mastercard" class="card-icon">
+        </div>
+      </div>
+      <form id="payment-form">
+        <div class="form-group">
+          <label for="card-number">Card Number</label>
+          <input
+                  type="text"
+                  id="card-number"
+                  placeholder="Card number must be 16 digits"
+                  required
+                  pattern="\d{16}"
+                  title="Card number must be 16 digits."
+          >
+        </div>
+        <div class="form-group">
+          <label for="expiration-date">Expiration Date</label>
+          <div class="expiration-inputs">
+            <select id="month" required>
+              <option value="" disabled selected>Month</option>
+              <script>
+                for (let i = 1; i <= 12; i++) {
+                  document.write(`<option value="${i}">${i}</option>`);
+                }
+              </script>
+            </select>
+            <select id="year" required>
+              <option value="" disabled selected>Year</option>
+              <script>
+                const year = new Date().getFullYear();
+                for (let i = 0; i < 12; i++) {
+                  document.write(`<option>${year + i}</option>`);
+                }
+              </script>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cvv">CVV / CVC</label>
+          <input type="password" id="cvv" pattern="\d{3}" placeholder="Enter CVV/CVC" required title="CVC must be 3 digits.">
+        </div>
+
+        <div class="form-group">
+          <label for="cardholder-name">Card Holder Name</label>
+          <input type="text" id="cardholder-name" placeholder="Enter card holder name" required>
+          <span id="customerName-error" class="error"></span>
+        </div>
+
+        <div class="payment-amount">
+          <span>Payment Amount: ₹</span>
+          <span id="payment-amount">400.00</span>
+        </div>
+        <button type="submit" id="pay-btn" class="pay-btn">Make Payment</button>
+        <button type="button" class="cancel-btn">Cancel</button>
+      </form>
+    </main>
+  </div>
+  <script>
+    document.getElementById('payment-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      // Perform custom validation for the "Card Holder Name" field
+      const customerNameField = document.getElementById('cardholder-name');
+      const customerName = customerNameField.value.trim();
+      const errorElement = document.getElementById('customerName-error');
+      const nameParts = customerName.split(/\s+/);
+      let isValid = true;
+
+      if (customerName.length <= 2) {
+        errorElement.textContent = 'Name must be more than 2 characters.';
+        isValid = false;
+      } else if (nameParts.length < 3) {
+        errorElement.textContent = 'Name must consist of at least 3 separate words.';
+        isValid = false;
+      } else if (!/^[A-Za-z\s]+$/.test(customerName)) {
+        errorElement.textContent = 'Name must contain only alphabets.';
+        isValid = false;
+      } else if (nameParts.every((part) => part.toLowerCase() === nameParts[0].toLowerCase())) {
+        errorElement.textContent = 'All parts of the name cannot be the same.';
+        isValid = false;
+      } else {
+        errorElement.textContent = '';
+      }
+
+      // Check the validity of the rest of the form
+      if (isValid && this.checkValidity()) {
+        window.location.href = "invoice.html";
+      } else {
+        this.reportValidity();
+      }
+    });
+  </script>
+</body>
+</html>

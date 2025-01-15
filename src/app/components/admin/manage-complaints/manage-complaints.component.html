@@ -1,0 +1,110 @@
+<div class="manage-complaints-container">
+  <div class="complaints-header">
+    <h2>Manage Complaints</h2>
+    <div class="filters">
+      <div class="search-bar">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="applyFilters()"
+          placeholder="Search complaints...">
+      </div>
+      <div class="filter-group">
+        <select [(ngModel)]="selectedStatus" (change)="applyFilters()">
+          <option value="All">All Status</option>
+          <option *ngFor="let status of statusFilters" [value]="status">
+            {{status}} Status
+          </option>
+        </select>
+        <select [(ngModel)]="selectedPriority" (change)="applyFilters()">
+          <option value="All">All Priority</option>
+          <option *ngFor="let priority of priorityFilters" [value]="priority">
+            {{priority}} Priority
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="complaints-table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Type</th>
+          <th>Problem</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Assigned To</th>
+          <th>Last Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let complaint of filteredComplaints">
+          <td>{{complaint.complaintId}}</td>
+          <td>{{complaint.customerName}}</td>
+          <td>
+            {{complaint.complaintType}}<br>
+            <small>{{complaint.subType}}</small>
+          </td>
+          <td>
+            <strong>{{complaint.problemTitle}}</strong><br>
+            <small>{{complaint.problemDescription}}</small>
+          </td>
+          <td>
+            <div class="dropdown">
+              <span class="status-badge" 
+                    [style.background-color]="getStatusColor(complaint.status)">
+                {{complaint.status}}
+              </span>
+              <div class="dropdown-content">
+                <a *ngFor="let status of statusFilters" 
+                   (click)="updateStatus(complaint, status)">
+                  {{status}}
+                </a>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dropdown">
+              <span class="priority-badge"
+                    [style.background-color]="getPriorityColor(complaint.priority)">
+                {{complaint.priority}}
+              </span>
+              <div class="dropdown-content">
+                <a *ngFor="let priority of priorityFilters"
+                   (click)="updatePriority(complaint, priority)">
+                  {{priority}}
+                </a>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="dropdown">
+              <span class="assigned-to">
+                {{complaint.assignedTo || 'Not Assigned'}}
+              </span>
+              <div class="dropdown-content">
+                <a *ngFor="let engineer of engineers"
+                   (click)="assignEngineer(complaint, engineer)">
+                  {{engineer}}
+                </a>
+              </div>
+            </div>
+          </td>
+          <td>{{complaint.lastUpdated | date:'short'}}</td>
+          <td class="action-buttons">
+            <button class="btn btn-delete" (click)="deleteComplaint(complaint.complaintId)">
+              Delete
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredComplaints.length === 0">
+          <td colspan="9" class="no-data">No complaints found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> 

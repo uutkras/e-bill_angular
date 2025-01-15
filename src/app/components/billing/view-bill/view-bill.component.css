@@ -1,0 +1,220 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: url('https://group.met.com/media/omvoe0f3/electricity.jpg?anchor=center&mode=crop&width=1920&rnd=133293326643000000&mode=max&upscale=false') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.bill-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 500px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 28px;
+}
+
+.bill-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 16px;
+}
+
+.bill-detail:last-child {
+  border-bottom: none;
+}
+
+.bill-detail strong {
+  color: #555;
+  font-weight: 600;
+}
+
+.bill-detail span {
+  color: #333;
+}
+
+.bill-detail.pending span {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.button-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #5cb85c;
+  color: white;
+  text-align: center;
+}
+
+.btn:hover {
+  background: #4cae4c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn:first-child {
+  background: #6c757d;
+}
+
+.btn:first-child:hover {
+  background: #5a6268;
+}
+
+@media (max-width: 600px) {
+  .bill-container {
+    padding: 20px;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+.customer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 2px solid #eee;
+  margin-bottom: 20px;
+}
+
+.bills-table {
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #444;
+}
+
+tr:hover:not(.paid) {
+  background-color: #f8f9fa;
+}
+
+tr.paid {
+  background-color: #f8f9fa;
+  color: #888;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.paid {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.unpaid {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.status-badge.due {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+tfoot {
+  font-weight: 500;
+  background-color: #f8f9fa;
+}
+
+tfoot td {
+  border-top: 2px solid #dee2e6;
+}
+
+.button-group {
+  margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .bill-container {
+    padding: 20px;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 8px;
+  }
+}

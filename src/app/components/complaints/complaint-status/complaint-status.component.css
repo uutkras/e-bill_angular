@@ -1,0 +1,176 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: url('https://group.met.com/media/omvoe0f3/electricity.jpg?anchor=center&mode=crop&width=1920&rnd=133293326643000000&mode=max&upscale=false') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.main-container {
+  flex: 1;
+  padding: 20px;
+}
+
+.status-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: white;
+  margin: 0;
+  font-size: 28px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn.new-complaint {
+  background: #5cb85c;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.new-complaint:hover {
+  background: #4cae4c;
+  transform: translateY(-2px);
+}
+
+.complaints-list {
+  display: grid;
+  gap: 20px;
+}
+
+.complaint-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease;
+}
+
+.complaint-header {
+  padding: 15px 20px;
+  background: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.complaint-id {
+  font-weight: 600;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.complaint-body {
+  padding: 20px;
+}
+
+.complaint-row {
+  margin-bottom: 15px;
+}
+
+.complaint-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail {
+  margin-bottom: 10px;
+}
+
+.label {
+  color: #666;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.value {
+  color: #333;
+  font-weight: 500;
+}
+
+.value.description {
+  display: block;
+  margin-top: 5px;
+  color: #666;
+  font-weight: normal;
+}
+
+.value.priority {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.complaint-footer {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.no-complaints {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.empty-state {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state .icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.empty-state h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .header-section {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .complaint-footer {
+    grid-template-columns: 1fr;
+  }
+} 

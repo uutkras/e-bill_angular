@@ -1,0 +1,57 @@
+<div class="manage-bills-container">
+  <div class="bills-header">
+    <h2>Manage Bills</h2>
+    <div class="filters">
+      <div class="search-bar">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="searchBills()"
+          placeholder="Search bills...">
+      </div>
+      <div class="filter-group">
+        <select [(ngModel)]="selectedStatus" (change)="applyFilters()">
+          <option value="All">All Status</option>
+          <option value="Paid">Paid</option>
+          <option value="Unpaid">Unpaid</option>
+          <option value="Overdue">Overdue</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="bills-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Bill ID</th>
+          <th>Customer</th>
+          <th>Amount</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bill of filteredBills">
+          <td>{{bill.billId}}</td>
+          <td>{{bill.customerName}}</td>
+          <td>₹{{bill.amount}}</td>
+          <td>{{bill.dueDate | date}}</td>
+          <td>
+            <span class="status-badge" [class]="'status-' + bill.status.toLowerCase()">
+              {{bill.status}}
+            </span>
+          </td>
+          <td class="action-buttons">
+            <button class="btn btn-edit">Edit</button>
+            <button class="btn btn-delete" (click)="deleteBill(bill.billId)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredBills.length === 0">
+          <td colspan="6" class="no-data">No bills found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> 

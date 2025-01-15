@@ -1,0 +1,147 @@
+<app-header></app-header>
+
+<div class="main-container">
+  <div class="payment-container">
+    <h2>Payment Details</h2>
+    
+    <div class="payment-modes">
+      <div class="mode-selector">
+        <button 
+          [class.active]="selectedPaymentMode === 'credit'"
+          (click)="paymentForm.get('paymentMode')?.setValue('credit')">
+          Credit Card
+        </button>
+        <button 
+          [class.active]="selectedPaymentMode === 'debit'"
+          (click)="paymentForm.get('paymentMode')?.setValue('debit')">
+          Debit Card
+        </button>
+        <button 
+          [class.active]="selectedPaymentMode === 'netbanking'"
+          (click)="paymentForm.get('paymentMode')?.setValue('netbanking')">
+          Net Banking
+        </button>
+        <button 
+          [class.active]="selectedPaymentMode === 'upi'"
+          (click)="paymentForm.get('paymentMode')?.setValue('upi')">
+          UPI
+        </button>
+      </div>
+    </div>
+
+    <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- Credit/Debit Card Section -->
+      <div *ngIf="selectedPaymentMode === 'credit' || selectedPaymentMode === 'debit'" class="payment-section">
+        <div class="payment-method">
+          <h3>Pay by {{selectedPaymentMode === 'credit' ? 'Credit' : 'Debit'}} Card</h3>
+          <div class="card-icons">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="Mastercard">
+          </div>
+        </div>
+
+        <!-- Card form fields -->
+        <div class="form-group">
+          <label for="cardNumber">Card Number</label>
+          <input 
+            type="text" 
+            id="cardNumber" 
+            formControlName="cardNumber"
+            placeholder="Enter 16-digit card number"
+            maxlength="19"
+            (input)="formatCardNumber($event)">
+          <div class="error" *ngIf="getErrorMessage('cardNumber')">
+            {{ getErrorMessage('cardNumber') }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group expiry">
+            <label>Expiration Date</label>
+            <div class="expiry-inputs">
+              <select formControlName="expiryMonth">
+                <option value="" disabled>Month</option>
+                <option *ngFor="let month of months" [value]="month">
+                  {{month}}
+                </option>
+              </select>
+              <select formControlName="expiryYear">
+                <option value="" disabled>Year</option>
+                <option *ngFor="let year of years" [value]="year">
+                  {{year}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group cvv">
+            <label for="cvv">CVV</label>
+            <input 
+              type="password" 
+              id="cvv" 
+              formControlName="cvv"
+              placeholder="CVV"
+              maxlength="3">
+            <div class="error" *ngIf="getErrorMessage('cvv')">
+              {{ getErrorMessage('cvv') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cardholderName">Card Holder Name</label>
+          <input 
+            type="text" 
+            id="cardholderName" 
+            formControlName="cardholderName"
+            placeholder="Enter cardholder's full name">
+          <div class="error" *ngIf="getErrorMessage('cardholderName')">
+            {{ getErrorMessage('cardholderName') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Net Banking Section -->
+      <div *ngIf="selectedPaymentMode === 'netbanking'" class="payment-section">
+        <h3>Net Banking</h3>
+        <div class="form-group">
+          <label for="bank">Select Bank</label>
+          <select id="bank" formControlName="bank">
+            <option value="" disabled>Select your bank</option>
+            <option *ngFor="let bank of banks" [value]="bank">{{bank}}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- UPI Section -->
+      <div *ngIf="selectedPaymentMode === 'upi'" class="payment-section">
+        <h3>UPI Payment</h3>
+        <div class="form-group">
+          <label for="upiId">UPI ID</label>
+          <input 
+            type="text" 
+            id="upiId" 
+            formControlName="upiId"
+            placeholder="Enter your UPI ID">
+          <div class="error" *ngIf="getErrorMessage('upiId')">
+            {{ getErrorMessage('upiId') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-amount">
+        <span>Payment Amount:</span>
+        <span class="amount">₹{{paymentAmount}}</span>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="btn cancel" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn submit" [disabled]="!paymentForm.valid">
+          Make Payment
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-footer></app-footer> 

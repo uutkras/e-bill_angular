@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Confirmed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('https://group.met.com/media/omvoe0f3/electricity.jpg?anchor=center&mode=crop&width=1920&rnd=133293326643000000&mode=max&upscale=false') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    .confirmation-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .success-icon {
+      font-size: 70px;
+      color: #5cb85c;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: #444;
+      margin-bottom: 15px;
+    }
+
+    .user-details {
+      background: #f4f4f4;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .user-details p {
+      margin: 10px 0;
+      color: #666;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #5cb85c;
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #4cae4c;
+    }
+
+    @media (max-width: 600px) {
+      .confirmation-container {
+        padding: 20px;
+        width: 95%;
+      }
+    }
+
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="confirmation-container" id="confirmationContainer">
+    <div class="success-icon">✓</div>
+    <h1>Registration Successful!</h1>
+    <p>Your account has been created successfully. Please review your details below.</p>
+
+    <div class="user-details" id="userDetailsSection" style="display:none;">
+      <p><strong>Consumer ID:</strong> <span id="displayConsumerId"></span></p>
+      <p><strong>Name:</strong> <span id="displayName"></span></p>
+      <p><strong>Email:</strong> <span id="displayEmail"></span></p>
+      <p><strong>Mobile Number:</strong> <span id="displayMobile"></span></p>
+      <p><strong>User ID:</strong> <span id="displayUserId"></span></p>
+    </div>
+
+    <div id="errorSection" class="error-message" style="display:none;">
+      Registration data could not be retrieved. Please complete the registration process again.
+    </div>
+
+    <div id="actionButtons" style="display:none;">
+      <a href="#" class="btn" onclick="downloadReceipt()">Download Registration Form</a>
+      <a href="login.html" class="btn" style="background-color: #f0ad4e; margin-left: 10px;">Login Now</a>
+    </div>
+  </div>
+
+  <script>
+    function displayUserDetails() {
+      try {
+        const savedData = localStorage.getItem('registrationData');
+
+        // Enhanced error checking
+        if (!savedData) {
+          throw new Error('No registration data found');
+        }
+
+        const formData = JSON.parse(savedData);
+
+        // Validate the parsed data
+        if (!formData.consumerId || !formData.customerName) {
+          throw new Error('Incomplete registration data');
+        }
+
+        // Display user details
+        document.getElementById('displayConsumerId').textContent = formData.consumerId;
+        document.getElementById('displayName').textContent = formData.customerName;
+        document.getElementById('displayEmail').textContent = formData.email;
+        document.getElementById('displayMobile').textContent = `${formData.countryCode} ${formData.mobile}`;
+        document.getElementById('displayUserId').textContent = formData.userId;
+
+        // Show details section
+        document.getElementById('userDetailsSection').style.display = 'block';
+        document.getElementById('actionButtons').style.display = 'block';
+        document.getElementById('errorSection').style.display = 'none';
+
+      } catch (error) {
+        console.error('Error retrieving registration data:', error);
+
+        // Show error section
+        document.getElementById('userDetailsSection').style.display = 'none';
+        document.getElementById('actionButtons').style.display = 'none';
+        document.getElementById('errorSection').style.display = 'block';
+      }
+    }
+
+    function downloadReceipt() {
+      try {
+        const savedData = localStorage.getItem('registrationData');
+        if (!savedData) {
+          throw new Error('No registration data found');
+        }
+
+        const formData = JSON.parse(savedData);
+        const receiptContent = `
+          Registration Receipt
+          ====================
+          Registration Date: ${new Date(formData.registeredAt).toLocaleString()}
+
+          Consumer Details:
+          -----------------
+          Consumer ID: ${formData.consumerId}
+          Bill Number: ${formData.billNumber}
+
+          Personal Information:
+          --------------------
+          Name: ${formData.customerName}
+          Email: ${formData.email}
+          Mobile: ${formData.countryCode} ${formData.mobile}
+
+          Account Credentials:
+          -------------------
+          User ID: ${formData.userId}
+        `;
+
+        const blob = new Blob([receiptContent], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'registration_receipt.txt';
+        link.click();
+
+      } catch (error) {
+        console.error('Error downloading receipt:', error);
+        alert('Unable to generate receipt. Please try again.');
+      }
+    }
+
+    // Load user details when page loads
+    window.onload = displayUserDetails;
+  </script>
+</body>
+</html>

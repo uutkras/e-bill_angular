@@ -1,0 +1,235 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: url('https://group.met.com/media/omvoe0f3/electricity.jpg?anchor=center&mode=crop&width=1920&rnd=133293326643000000&mode=max&upscale=false') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.payment-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 500px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.payment-method {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.payment-method h3 {
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.card-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.card-icons img {
+  height: 30px;
+  object-fit: contain;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.expiry {
+  flex: 2;
+}
+
+.cvv {
+  flex: 1;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #444;
+  font-weight: 500;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #5cb85c;
+}
+
+.expiry-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.expiry-inputs select {
+  flex: 1;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.payment-amount {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 30px 0;
+  font-size: 18px;
+}
+
+.amount {
+  color: #5cb85c;
+  font-weight: 600;
+}
+
+.button-group {
+  display: flex;
+  gap: 20px;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.submit {
+  background: #5cb85c;
+  color: white;
+}
+
+.btn.submit:hover {
+  background: #4cae4c;
+  transform: translateY(-2px);
+}
+
+.btn.submit:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn.cancel {
+  background: #dc3545;
+  color: white;
+}
+
+.btn.cancel:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .payment-container {
+    padding: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
+.payment-modes {
+  margin-bottom: 30px;
+}
+
+.mode-selector {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.mode-selector button {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.mode-selector button.active {
+  background: #5cb85c;
+  color: white;
+  border-color: #5cb85c;
+}
+
+.mode-selector button:hover:not(.active) {
+  background: #f8f9fa;
+}
+
+.payment-section {
+  animation: fadeIn 0.3s ease;
+}
+
+input[type="text"].formatted {
+  letter-spacing: 1px;
+  font-family: monospace;
+} 

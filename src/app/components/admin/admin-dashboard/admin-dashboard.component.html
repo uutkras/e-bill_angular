@@ -1,0 +1,42 @@
+<div class="dashboard-container">
+  <header class="admin-header">
+    <h1>Admin Dashboard</h1>
+    <div class="admin-profile">
+      <span>Admin</span>
+    </div>
+  </header>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card" *ngFor="let stat of stats" 
+         [style.border-color]="stat.color">
+      <div class="stat-icon" [style.background-color]="stat.color">
+        {{stat.icon}}
+      </div>
+      <div class="stat-info">
+        <h3>{{stat.title}}</h3>
+        <p>{{stat.value | number}}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="activity-section">
+    <div class="recent-complaints">
+      <h2>Recent Complaints</h2>
+      <div class="activity-card" *ngFor="let complaint of recentComplaints">
+        <div class="activity-header">
+          <span class="id">{{complaint.complaintId}}</span>
+          <span class="status" [style.background-color]="complaint.status === 'Pending' ? '#ffc107' : '#28a745'">
+            {{complaint.status}}
+          </span>
+        </div>
+        <p class="title">{{complaint.problemTitle}}</p>
+        <p class="meta">
+          <span>{{complaint.userName}}</span>
+          <span>{{complaint.date | date:'medium'}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div> 

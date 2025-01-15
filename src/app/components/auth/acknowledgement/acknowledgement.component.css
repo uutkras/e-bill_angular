@@ -1,0 +1,117 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.acknowledgement-box {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 48px;
+  color: #5cb85c;
+  margin-bottom: 20px;
+  height: 80px;
+  width: 80px;
+  line-height: 80px;
+  border-radius: 50%;
+  background: #eaf6ea;
+  margin: 0 auto 20px;
+}
+
+h2 {
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.message {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+.details {
+  text-align: left;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+h3 {
+  color: #444;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.detail-item {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.label {
+  color: #666;
+  font-weight: 600;
+}
+
+.value {
+  color: #444;
+}
+
+.note {
+  color: #666;
+  margin: 20px 0;
+  padding: 15px;
+  background: #fff3cd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.login-btn {
+  background: #5cb85c;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-btn:hover {
+  background: #4cae4c;
+}
+
+@media (max-width: 600px) {
+  .acknowledgement-box {
+    padding: 20px;
+  }
+
+  .details {
+    padding: 15px;
+  }
+
+  .detail-item {
+    flex-direction: column;
+  }
+
+  .value {
+    margin-top: 5px;
+  }
+} 

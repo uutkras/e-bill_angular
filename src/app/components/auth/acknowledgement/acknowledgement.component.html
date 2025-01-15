@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="acknowledgement-box">
+    <div class="success-icon">✓</div>
+    <h2>Registration Successful!</h2>
+    
+    <div class="message">
+      Thank you for registering with our Electricity Bill Payment System.
+    </div>
+
+    <div class="details">
+      <h3>Registration Details:</h3>
+      <div class="detail-item">
+        <span class="label">Customer Name:</span>
+        <span class="value">{{userData?.customerName}}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Consumer ID:</span>
+        <span class="value">{{userData?.consumerId}}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">User ID:</span>
+        <span class="value">{{userData?.userId}}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Email:</span>
+        <span class="value">{{userData?.email}}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Mobile:</span>
+        <span class="value">{{userData?.countryCode}} {{userData?.mobile}}</span>
+      </div>
+      <div class="detail-item">
+        <span class="label">Registered On:</span>
+        <span class="value">{{registrationTime}}</span>
+      </div>
+    </div>
+
+    <div class="note">
+      Please save your User ID for future reference. You can now login using your User ID and password.
+    </div>
+
+    <button (click)="goToLogin()" class="login-btn">
+      Proceed to Login
+    </button>
+  </div>
+</div> 

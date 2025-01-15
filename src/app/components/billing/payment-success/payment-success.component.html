@@ -1,0 +1,38 @@
+<app-header></app-header>
+
+<div class="main-container">
+  <div class="success-container">
+    <div class="success-icon">✓</div>
+    <h2>Payment Successful!</h2>
+    
+    <div class="payment-details">
+      <div class="detail">
+        <span class="label">Transaction ID:</span>
+        <span class="value">{{transactionId}}</span>
+      </div>
+      <div class="detail">
+        <span class="label">Amount Paid:</span>
+        <span class="value">₹{{paymentAmount}}</span>
+      </div>
+      <div class="detail">
+        <span class="label">Date:</span>
+        <span class="value">{{paymentDate | date:'medium'}}</span>
+      </div>
+      <div class="detail">
+        <span class="label">Status:</span>
+        <span class="value success">Success</span>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button class="btn download" (click)="downloadInvoice()">
+        ⬇️ Download Invoice
+      </button>
+      <button class="btn home" (click)="goToHome()">
+        Go to Home
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

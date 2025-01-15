@@ -1,0 +1,13 @@
+<header>
+  <div class="logo">WE Energy</div>
+  <nav>
+    <ng-container *ngFor="let item of navItems">
+      <a *ngIf="!isCurrentRoute(item.path)" 
+         [routerLink]="item.path" 
+         routerLinkActive="active">
+        {{item.label}}
+      </a>
+    </ng-container>
+    <a class="logout" (click)="logout()">Logout</a>
+  </nav>
+</header> 

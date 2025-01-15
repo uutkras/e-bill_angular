@@ -1,0 +1,113 @@
+<app-header></app-header>
+
+<div class="main-container">
+  <div class="complaint-container">
+    <h2>Register Complaint</h2>
+    
+    <form [formGroup]="complaintForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="complaintType">Complaint Type</label>
+          <select id="complaintType" formControlName="complaintType">
+            <option value="">Select Type</option>
+            <option *ngFor="let type of complaintTypes" [value]="type.value">
+              {{type.value | titlecase}}
+            </option>
+          </select>
+          <div class="error" *ngIf="getErrorMessage('complaintType')">
+            {{ getErrorMessage('complaintType') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="subType">Sub Type</label>
+          <select id="subType" formControlName="subType">
+            <option value="">Select Sub-Type</option>
+            <option *ngFor="let subType of availableSubTypes" [value]="subType">
+              {{subType}}
+            </option>
+          </select>
+          <div class="error" *ngIf="getErrorMessage('subType')">
+            {{ getErrorMessage('subType') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="userId">User ID</label>
+          <input type="text" id="userId" formControlName="userId">
+          <div class="error" *ngIf="getErrorMessage('userId')">
+            {{ getErrorMessage('userId') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="userName">User Name</label>
+          <input type="text" id="userName" formControlName="userName">
+          <div class="error" *ngIf="getErrorMessage('userName')">
+            {{ getErrorMessage('userName') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="billNumber">Bill Number</label>
+          <input type="text" id="billNumber" formControlName="billNumber">
+          <div class="error" *ngIf="getErrorMessage('billNumber')">
+            {{ getErrorMessage('billNumber') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mobileNumber">Mobile Number</label>
+          <input type="tel" id="mobileNumber" formControlName="mobileNumber" maxlength="10">
+          <div class="error" *ngIf="getErrorMessage('mobileNumber')">
+            {{ getErrorMessage('mobileNumber') }}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input type="text" id="address" formControlName="address">
+        <div class="error" *ngIf="getErrorMessage('address')">
+          {{ getErrorMessage('address') }}
+        </div>
+        <div class="char-limit">Max 100 characters</div>
+      </div>
+
+      <div class="form-group">
+        <label for="problemTitle">Problem Title</label>
+        <input type="text" id="problemTitle" formControlName="problemTitle">
+        <div class="error" *ngIf="getErrorMessage('problemTitle')">
+          {{ getErrorMessage('problemTitle') }}
+        </div>
+        <div class="char-limit">Max 50 characters</div>
+      </div>
+
+      <div class="form-group">
+        <label for="problemDescription">Problem Description</label>
+        <textarea 
+          id="problemDescription" 
+          formControlName="problemDescription"
+          rows="4">
+        </textarea>
+        <div class="error" *ngIf="getErrorMessage('problemDescription')">
+          {{ getErrorMessage('problemDescription') }}
+        </div>
+        <div class="char-limit">Max 250 characters</div>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="btn cancel" (click)="onReset()">Reset</button>
+        <button type="submit" class="btn submit" [disabled]="!complaintForm.valid">
+          Submit Complaint
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-footer></app-footer>

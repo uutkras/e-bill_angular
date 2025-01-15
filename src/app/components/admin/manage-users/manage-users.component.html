@@ -1,0 +1,50 @@
+<div class="manage-users-container">
+  <div class="users-header">
+    <h2>Manage Users</h2>
+    <div class="search-bar">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="searchUsers()"
+        placeholder="Search users...">
+    </div>
+  </div>
+
+  <div class="users-table">
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Mobile</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of filteredUsers">
+          <td>{{user.userId}}</td>
+          <td>{{user.customerName}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.mobileNumber}}</td>
+          <td>
+            <span class="status-badge" 
+                  [class.status-active]="user.status === 'Active'"
+                  [class.status-inactive]="user.status === 'Inactive'"
+                  (click)="toggleUserStatus(user)">
+              {{user.status}}
+            </span>
+          </td>
+          <td class="action-buttons">
+            <button class="btn btn-edit">Edit</button>
+            <button class="btn btn-delete" (click)="deleteUser(user.userId)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredUsers.length === 0">
+          <td colspan="6" class="no-data">No users found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> 

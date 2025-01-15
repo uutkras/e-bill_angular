@@ -1,0 +1,145 @@
+<div class="container">
+  <div class="progress">
+    <div class="dot" [class.active]="currentStep >= 1"></div>
+    <div class="dot" [class.active]="currentStep >= 2"></div>
+    <div class="dot" [class.active]="currentStep >= 3"></div>
+  </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <!-- Step 1 -->
+    <div class="tile" [class.active]="currentStep === 1">
+      <h2>Step 1: Account Identification</h2>
+      <div class="form-group">
+        <label for="consumerId">Consumer ID</label>
+        <input 
+          type="text" 
+          id="consumerId" 
+          formControlName="consumerId"
+          maxlength="13">
+        <div class="remaining" id="consumerIdRemaining">
+          {{13 - (registerForm.get('consumerId')?.value?.length || 0)}} digits remaining
+        </div>
+        <div class="error" *ngIf="registerForm.get('consumerId')?.touched && registerForm.get('consumerId')?.errors">
+          {{ getErrorMessage('consumerId') }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="billNumber">Bill Number</label>
+        <input 
+          type="text" 
+          id="billNumber" 
+          formControlName="billNumber"
+          maxlength="5">
+        <div class="remaining" id="billNumberRemaining">
+          {{5 - (registerForm.get('billNumber')?.value?.length || 0)}} digits remaining
+        </div>
+        <div class="error" *ngIf="registerForm.get('billNumber')?.touched && registerForm.get('billNumber')?.errors">
+          {{ getErrorMessage('billNumber') }}
+        </div>
+      </div>
+
+      <div class="btn">
+        <button type="button" (click)="nextStep()" [disabled]="!isStep1Valid()">Next</button>
+        <button type="button" class="reset" (click)="resetForm()">Reset</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="tile" [class.active]="currentStep === 2">
+      <h2>Step 2: Personal Information</h2>
+      <div class="form-group">
+        <label for="customerName">Name</label>
+        <input 
+          type="text" 
+          id="customerName" 
+          formControlName="customerName"
+          maxlength="50">
+        <div class="error" *ngIf="registerForm.get('customerName')?.touched && registerForm.get('customerName')?.errors">
+          {{ getErrorMessage('customerName') }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email">
+        <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
+          {{ getErrorMessage('email') }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="mobile">Mobile Number</label>
+        <select id="countryCode" formControlName="countryCode">
+          <option value="+91">+91 (India)</option>
+        </select>
+        <input 
+          type="text" 
+          id="mobile" 
+          formControlName="mobileNumber"
+          maxlength="10">
+        <div class="error" *ngIf="registerForm.get('mobileNumber')?.touched && registerForm.get('mobileNumber')?.errors">
+          {{ getErrorMessage('mobileNumber') }}
+        </div>
+      </div>
+
+      <div class="btn">
+        <button type="button" (click)="prevStep()">Back</button>
+        <button type="button" (click)="nextStep()" [disabled]="!isStep2Valid()">Next</button>
+        <button type="button" class="reset" (click)="resetForm()">Reset</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="tile" [class.active]="currentStep === 3">
+      <h2>Step 3: Account Credentials</h2>
+      <div class="form-group">
+        <label for="userId">User ID</label>
+        <input 
+          type="text" 
+          id="userId" 
+          formControlName="userId"
+          minlength="5"
+          maxlength="20">
+        <div class="error" *ngIf="registerForm.get('userId')?.touched && registerForm.get('userId')?.errors">
+          {{ getErrorMessage('userId') }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password"
+          minlength="8"
+          maxlength="30">
+        <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
+          {{ getErrorMessage('password') }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input 
+          type="password" 
+          id="confirmPassword" 
+          formControlName="confirmPassword"
+          minlength="8"
+          maxlength="30">
+        <div class="error" *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors">
+          {{ getErrorMessage('confirmPassword') }}
+        </div>
+      </div>
+
+      <div class="btn">
+        <button type="button" (click)="prevStep()">Back</button>
+        <button type="submit" [disabled]="!registerForm.valid">Register</button>
+        <button type="button" class="reset" (click)="resetForm()">Reset</button>
+      </div>
+    </div>
+  </form>
+</div>

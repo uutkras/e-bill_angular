@@ -1,0 +1,61 @@
+<app-header></app-header>
+
+<div class="main-container">
+  <div class="bill-container">
+    <h1>Bill Details</h1>
+    
+    <div class="customer-info">
+      <strong>Customer Name:</strong>
+      <span>{{customerName}}</span>
+    </div>
+
+    <div class="bills-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Select</th>
+            <th>Month</th>
+            <th>Amount</th>
+            <th>Due Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bill of bills" [class.paid]="bill.status === 'Paid'">
+            <td>
+              <input type="checkbox" 
+                     [disabled]="bill.status === 'Paid'"
+                     [checked]="bill.selected"
+                     (change)="toggleBillSelection(bill)">
+            </td>
+            <td>{{bill.month}}</td>
+            <td>₹{{bill.amount}}</td>
+            <td>{{bill.dueDate | date:'mediumDate'}}</td>
+            <td>
+              <span class="status-badge" [class]="bill.status.toLowerCase()">
+                {{bill.status}}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2"><strong>Total Selected:</strong></td>
+            <td colspan="3"><strong>₹{{totalSelected}}</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="button-group">
+      <button class="btn" routerLink="/welcome">Back</button>
+      <button class="btn" 
+              [disabled]="!canPayBill()" 
+              (click)="payBill()">
+        Pay Selected Bills
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

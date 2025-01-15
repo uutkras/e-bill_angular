@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Status</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('https://group.met.com/media/omvoe0f3/electricity.jpg?anchor=center&mode=crop&width=1920&rnd=133293326643000000&mode=max&upscale=false') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .status-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            animation: fadeIn 0.7s ease;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        .complaint-detail {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #5cb85c;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #4cae4c;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="status-container">
+        <h1>Complaint Status</h1>
+        <div id="complaintList"></div>
+        <button class="btn" onclick="goBack()">Back</button>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back(); // Go back to the previous page
+        }
+
+        function generateRandomAssignedTo() {
+            const personnel = ['John Doe', 'Jane Smith', 'Alice Johnson', 'Bob Brown', 'Charlie Davis'];
+            return personnel[Math.floor(Math.random() * personnel.length)];
+        }
+
+        function generateRandomStatus() {
+            const statuses = ['Pending', 'Work in Progress', 'Resolved', 'Closed'];
+            return statuses[Math.floor(Math.random() * statuses.length)];
+        }
+
+        function generateRandomETA() {
+            const etaOptions = ['2 hours', '5 hours', '1 day', '3 days'];
+            return etaOptions[Math.floor(Math.random() * etaOptions.length)];
+        }
+
+        function displayComplaints() {
+            const complaints = JSON.parse(localStorage.getItem('complaints')) || [];
+            const complaintListDiv = document.getElementById('complaintList');
+
+            if (complaints.length === 0) {
+                complaintListDiv.innerHTML = '<p>No complaints found.</p>';
+                return;
+            }
+
+            complaints.forEach((complaint, index) => {
+                const assignedTo = generateRandomAssignedTo();
+                const status = generateRandomStatus();
+                const eta = generateRandomETA();
+
+                complaintListDiv.innerHTML += `
+                    <div class="complaint-detail">
+                        <h3>Complaint #${index + 1}</h3>
+                        <p><strong>Type:</strong> ${complaint.complaintType}</p>
+                        <p><strong>Sub-Type:</strong> ${complaint.subType}</p>
+                        <p><strong>User ID:</strong> ${complaint.userId}</p>
+                        <p><strong>User Name:</strong> ${complaint.userName}</p>
+                        <p><strong>Bill Number:</strong> ${complaint.billNumber}</p>
+                        <p><strong>Mobile Number:</strong> ${complaint.mobileNumber}</p>
+                        <p><strong>Address:</strong> ${complaint.address}</p>
+                        <p><strong>Problem Title:</strong> ${complaint.problemTitle}</p>
+                        <p><strong>Problem Description:</strong> ${complaint.problemDescription}</p>
+                        <p><strong>Assigned To:</strong> ${assignedTo}</p>
+                        <p><strong>Status:</strong> ${status}</p>
+                        <p><strong>ETA:</strong> ${eta}</p>
+                    </div>
+                `;
+            });
+        }
+
+        displayComplaints();
+    </script>
+</body>
+
+</html>

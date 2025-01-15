@@ -1,0 +1,31 @@
+<div class="admin-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">WE Energy Admin</div>
+    <nav class="admin-nav">
+      <a routerLink="/admin/dashboard" routerLinkActive="active">
+        📊 Dashboard
+      </a>
+      <a routerLink="/admin/users" routerLinkActive="active">
+        👥 Manage Users
+      </a>
+      <a routerLink="/admin/bills" routerLinkActive="active">
+        📄 Manage Bills
+      </a>
+      <a routerLink="/admin/complaints" routerLinkActive="active">
+        ⚠️ Manage Complaints
+      </a>
+      <a routerLink="/admin/payments" routerLinkActive="active">
+        💰 Payment History
+      </a>
+      <a (click)="logout()" class="logout">
+        🚪 Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div> 

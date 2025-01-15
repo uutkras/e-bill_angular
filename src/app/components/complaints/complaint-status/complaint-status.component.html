@@ -1,0 +1,88 @@
+<app-header></app-header>
+
+<div class="main-container">
+  <div class="status-container">
+    <div class="header-section">
+      <h2>My Complaints</h2>
+      <button class="btn new-complaint" (click)="registerNewComplaint()">
+        Register New Complaint
+      </button>
+    </div>
+
+    <div class="complaints-list" *ngIf="complaints.length > 0">
+      <div class="complaint-card" *ngFor="let complaint of complaints">
+        <div class="complaint-header">
+          <div class="complaint-id">
+            <span class="label">Complaint ID:</span>
+            <span class="value">{{complaint.complaintId}}</span>
+          </div>
+          <div class="status-badge" [style.background-color]="getStatusColor(complaint.status)">
+            {{complaint.status}}
+          </div>
+        </div>
+
+        <div class="complaint-body">
+          <div class="complaint-row">
+            <div class="detail">
+              <span class="label">Type:</span>
+              <span class="value">{{complaint.complaintType | titlecase}} - {{complaint.subType}}</span>
+            </div>
+            <div class="detail">
+              <span class="label">Priority:</span>
+              <span class="value priority">{{getPriorityLabel(complaint.priority)}}</span>
+            </div>
+          </div>
+
+          <div class="complaint-row">
+            <div class="detail">
+              <span class="label">Problem:</span>
+              <span class="value">{{complaint.problemTitle}}</span>
+            </div>
+          </div>
+
+          <div class="complaint-row">
+            <div class="detail">
+              <span class="label">Description:</span>
+              <span class="value description">{{complaint.problemDescription}}</span>
+            </div>
+          </div>
+
+          <div class="complaint-row">
+            <div class="detail">
+              <span class="label">Assigned To:</span>
+              <span class="value">{{complaint.assignedTo}}</span>
+            </div>
+          </div>
+
+          <div class="complaint-footer">
+            <div class="detail">
+              <span class="label">Filed On:</span>
+              <span class="value">{{complaint.date | date:'medium'}}</span>
+            </div>
+            <div class="detail">
+              <span class="label">Expected Resolution:</span>
+              <span class="value">{{complaint.expectedResolution}}</span>
+            </div>
+            <div class="detail">
+              <span class="label">Last Updated:</span>
+              <span class="value">{{complaint.lastUpdated}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-complaints" *ngIf="complaints.length === 0">
+      <div class="empty-state">
+        <div class="icon">📝</div>
+        <h3>No Complaints Found</h3>
+        <p>You haven't filed any complaints yet.</p>
+        <button class="btn new-complaint" (click)="registerNewComplaint()">
+          Register Your First Complaint
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer> 

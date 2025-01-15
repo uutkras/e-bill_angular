@@ -1,0 +1,148 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+}
+
+header h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+
+
+header nav ul {
+  display: flex;
+  list-style: none;
+}
+
+header nav ul li {
+  margin: 0 10px;
+}
+
+header nav ul li a {
+  text-decoration: none;
+  color: #007BFF;
+}
+
+.logout-section {
+  display: flex;
+  align-items: center;
+}
+
+.logout-section span {
+  margin-right: 10px;
+}
+
+.logout-btn {
+  background: #f44336;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+main {
+  padding: 20px 0;
+}
+
+main h2 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.expiration-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.payment-amount {
+  margin: 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.pay-btn, .cancel-btn {
+  width: 48%;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pay-btn {
+  background: #007BFF;
+  color: white;
+}
+
+.cancel-btn {
+  background: #ddd;
+}
+
+button:focus {
+  outline: none;
+}
+
+.payment-method {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.payment-method h3 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.card-icons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.card-icon {
+  width: 60px;
+  height: auto;
+}

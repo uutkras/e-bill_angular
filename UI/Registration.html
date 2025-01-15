@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('https://group.met.com/media/omvoe0f3/electricity.jpg?anchor=center&mode=crop&width=1920&rnd=133293326643000000&mode=max&upscale=false') no-repeat center center fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      padding: 50px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
+    .tile {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    .tile.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h2 {
+      text-align: center;
+      color: #444;
+      margin-bottom: 10px;
+    }
+    label {
+      font-weight: 600;
+      color: #444;
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .btn {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 30px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      background: #5cb85c;
+      color: #fff;
+    }
+    button:hover {
+      background: #4cae4c;
+    }
+    button.reset {
+      background: #f0ad4e;
+    }
+    button.reset:hover {
+      background: #ec971f;
+    }
+    .progress {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .dot {
+      height: 10px;
+      width: 10px;
+      background: #ccc;
+      border-radius: 50%;
+      margin: 0 5px;
+    }
+    .dot.active {
+      background: #5cb85c;
+    }
+    .remaining {
+      font-size: 12px;
+      color: #888;
+      margin-top: 5px;
+    }
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+    @media (max-width: 600px) {
+      .container {
+        width: 90%;
+        padding: 15px;
+      }
+      button {
+        width: 100%;
+        margin-top: 10px;
+      }
+      .btn {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="progress">
+      <div class="dot active"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    <form id="registrationForm">
+      <!-- Step 1 -->
+      <div class="tile active" id="tile1">
+        <h2>Step 1: Account Identification</h2>
+        <label for="consumerId">Consumer ID</label>
+        <input type="text" id="consumerId" maxlength="13" required>
+        <div class="remaining" id="consumerIdRemaining">13 digits remaining</div>
+        <div class="error" id="consumerIdError"></div>
+        <label for="billNumber">Bill Number</label>
+        <input type="text" id="billNumber" maxlength="5" required>
+        <div class="remaining" id="billNumberRemaining">5 digits remaining</div>
+        <div class="error" id="billNumberError"></div>
+        <div class="btn">
+          <button type="button" onclick="validateAndNextTile(1)">Next</button>
+          <button type="reset" class="reset" onclick="resetForm()">Reset</button>
+        </div>
+      </div>
+      <!-- Step 2 -->
+      <div class="tile" id="tile2">
+        <h2>Step 2: Personal Information</h2>
+        <label for="customerName">Name</label>
+        <input type="text" id="customerName" maxlength="50" required>
+        <div class="error" id="customerNameError"></div>
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+        <div class="error" id="emailError"></div>
+        <label for="mobile">Mobile Number</label>
+        <select id="countryCode" required>
+          <option value="">Country Code</option>
+          <option value="+91">+91 (India)</option>
+        </select>
+        <input type="text" id="mobile" maxlength="10" required>
+        <div class="error" id="mobileError"></div>
+        <div class="btn">
+          <button type="button" onclick="prevTile(2)">Back</button>
+          <button type="button" onclick="validateAndNextTile(2)">Next</button>
+          <button type="reset" class="reset" onclick="resetForm()">Reset</button>
+        </div>
+      </div>
+      <!-- Step 3 -->
+      <div class="tile" id="tile3">
+        <h2>Step 3: Account Credentials</h2>
+        <label for="userId">User ID</label>
+        <input type="text" id="userId" minlength="5" maxlength="20" required>
+        <div class="error" id="userIdError"></div>
+        <label for="password">Password</label>
+        <input type="password" id="password" minlength="8" maxlength="30" required>
+        <div class="error" id="passwordError"></div>
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" minlength="8" maxlength="30" required>
+        <div class="error" id="confirmPasswordError"></div>
+        <div class="btn">
+          <button type="button" onclick="prevTile(3)">Back</button>
+          <button type="submit">Register</button>
+          <button type="reset" class="reset" onclick="resetForm()">Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script>
+    // Tiles and Progress Dots Navigation
+    const tiles = document.querySelectorAll('.tile');
+    const dots = document.querySelectorAll('.dot');
+
+    function nextTile(current) {
+      tiles[current - 1].classList.remove('active');
+      tiles[current].classList.add('active');
+      dots[current - 1].classList.remove('active');
+      dots[current].classList.add('active');
+    }
+
+    function prevTile(current) {
+      tiles[current - 1].classList.remove('active');
+      tiles[current - 2].classList.add('active');
+      dots[current - 1].classList.remove('active');
+      dots[current - 2].classList.add('active');
+    }
+
+    // Validation Helpers
+    function showError(elementId, message) {
+      const errorElement = document.getElementById(`${elementId}Error`);
+      errorElement.textContent = message;
+    }
+
+    function clearError(elementId) {
+      const errorElement = document.getElementById(`${elementId}Error`);
+      errorElement.textContent = '';
+    }
+
+    // Input Tracking for Remaining Characters
+    const consumerIdInput = document.getElementById('consumerId');
+    const consumerIdRemaining = document.getElementById('consumerIdRemaining');
+    const billNumberInput = document.getElementById('billNumber');
+    const billNumberRemaining = document.getElementById('billNumberRemaining');
+
+    consumerIdInput.addEventListener('input', () => {
+      const remaining = 13 - consumerIdInput.value.length;
+      consumerIdRemaining.textContent = `${remaining} digits remaining`;
+      consumerIdRemaining.style.color = remaining === 0 ? 'green' : '#888';
+    });
+
+    billNumberInput.addEventListener('input', () => {
+      const remaining = 5 - billNumberInput.value.length;
+      billNumberRemaining.textContent = `${remaining} digits remaining`;
+      billNumberRemaining.style.color = remaining === 0 ? 'green' : '#888';
+    });
+
+    // Extensive Validation Functions
+    function validateConsumerDetails() {
+      const consumerId = consumerIdInput.value.trim();
+      const billNumber = billNumberInput.value.trim();
+      let isValid = true;
+
+      // Consumer ID validation (must be 13 digits)
+      if (!/^\d{13}$/.test(consumerId)) {
+        showError('consumerId', 'Consumer ID must be exactly 13 digits');
+        isValid = false;
+      } else {
+        clearError('consumerId');
+      }
+
+      // Bill Number validation (must be 5 digits)
+      if (!/^\d{5}$/.test(billNumber)) {
+        showError('billNumber', 'Bill Number must be exactly 5 digits');
+        isValid = false;
+      } else {
+        clearError('billNumber');
+      }
+
+      return isValid;
+    }
+
+    function validatePersonalDetails() {
+      const customerName = document.getElementById('customerName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const mobile = document.getElementById('mobile').value.trim();
+      const countryCode = document.getElementById('countryCode').value;
+      let isValid = true;
+
+      // Name validation (letters and spaces only)
+      if (!/^[A-Za-z\s]{2,50}$/.test(customerName)) {
+        showError('customerName', 'Name must be 2-50 letters');
+        isValid = false;
+      } else {
+        clearError('customerName');
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showError('email', 'Invalid email format');
+        isValid = false;
+      } else {
+        clearError('email');
+      }
+	//const mobregex = /^[6-9]\d{9}$/;
+      // Mobile validation
+      if (countryCode === '') {
+        showError('mobile', 'Select a country code');
+        isValid = false;
+      } else if (!/^\d{10}$/.test(mobile)) {
+        showError('mobile', 'Mobile number must be 10 digits');
+        isValid = false;
+      } else if (!/^[6-9]\d{9}$/.test(mobile)){
+	showError('mobile', 'Mobile number must start with 6 and above');
+	isValid = false;
+	} 
+	else {
+        clearError('mobile');
+      }
+
+      return isValid;
+    }
+
+    function validateCredentials() {
+      const userId = document.getElementById('userId').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      let isValid = true;
+
+      // User ID validation (alphanumeric, 5-20 characters)
+      if (!/^[A-Za-z0-9]{5,20}$/.test(userId)) {
+        showError('userId', 'User ID must be 5-20 alphanumeric characters');
+        isValid = false;
+      } else {
+        clearError('userId');
+      }
+
+      // Password validation
+      if (password.length < 8) {
+        showError('password', 'Password must be at least 8 characters');
+        isValid = false;
+      } else if (!/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])/.test(password)) {
+        showError('password', 'Password must include uppercase, lowercase, number, and special character');
+        isValid = false;
+      } else {
+        clearError('password');
+      }
+
+      // Confirm password validation
+      if (password !== confirmPassword) {
+        showError('confirmPassword', 'Passwords do not match');
+        isValid = false;
+      } else {
+        clearError('confirmPassword');
+      }
+
+      return isValid;
+    }
+
+    // Navigation with Validation
+    function validateAndNextTile(currentTile) {
+      let isValid = false;
+
+      switch(currentTile) {
+        case 1:
+          isValid = validateConsumerDetails();
+          break;
+        case 2:
+          isValid = validatePersonalDetails();
+          break;
+        case 3:
+          isValid = validateCredentials();
+          break;
+      }
+
+      if (isValid) {
+        nextTile(currentTile);
+      }
+    }
+
+    // Local Storage Management
+    function saveFormData() {
+      const formData = {
+        consumerId: consumerIdInput.value,
+        billNumber: billNumberInput.value,
+        customerName: document.getElementById('customerName').value,
+        email: document.getElementById('email').value,
+        countryCode: document.getElementById('countryCode').value,
+        mobile: document.getElementById('mobile').value,
+        userId: document.getElementById('userId').value
+      };
+      localStorage.setItem('registrationData', JSON.stringify(formData));
+    }
+
+    function loadFormData() {
+      const savedData = localStorage.getItem('registrationData');
+      if (savedData) {
+        const formData = JSON.parse(savedData);
+        consumerIdInput.value = formData.consumerId;
+        billNumberInput.value = formData.billNumber;
+        document.getElementById('customerName').value = formData.customerName;
+        document.getElementById('email').value = formData.email;
+        document.getElementById('countryCode').value = formData.countryCode;
+        document.getElementById('mobile').value = formData.mobile;
+        document.getElementById('userId').value = formData.userId;
+      }
+    }
+
+    function resetForm() {
+      localStorage.removeItem('registrationData');
+      resetTiles();
+    }
+
+    function resetTiles() {
+      tiles.forEach((tile, index) => {
+        tile.classList.remove('active');
+        dots[index].classList.remove('active');
+      });
+      tiles[0].classList.add('active');
+      dots[0].classList.add('active');
+    }
+
+    // Form Submission
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Final validation before submission
+      if (validateConsumerDetails() && validatePersonalDetails() && validateCredentials()) {
+        saveFormData(); // Save data before redirection
+
+        // Comprehensive data collection
+        const formData = {
+          registeredAt: new Date().toISOString(),
+          consumerId: document.getElementById('consumerId').value,
+          billNumber: document.getElementById('billNumber').value,
+          customerName: document.getElementById('customerName').value,
+          email: document.getElementById('email').value,
+          countryCode: document.getElementById('countryCode').value,
+          mobile: document.getElementById('mobile').value,
+          userId: document.getElementById('userId').value,
+	  password: document.getElementById('password').value
+        };
+
+        try {
+          localStorage.setItem('registrationData', JSON.stringify(formData));
+          window.location.href = 'acknowledgement.html';
+        } catch (error) {
+          console.error('Error saving registration data:', error);
+          alert('Unable to save registration data. Please try again.');
+        }
+      }
+    });
+
+    // Load form data on page load
+    window.onload = loadFormData;
+  </script>
+</body>
+</html>

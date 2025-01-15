@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+	    background: url('https://group.met.com/media/omvoe0f3/electricity.jpg?anchor=center&mode=crop&width=1920&rnd=133293326643000000&mode=max&upscale=false') no-repeat center center fixed;
+            #background: #f9f9f9;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #5cb85c;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #5cb85c;
+        }
+
+        .bill-details-container {
+            position: relative;
+            background: white;
+            padding: 50px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .amount {
+            font-size: 24px;
+            color: #5cb85c;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #5cb85c;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 5px;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #4cae4c;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">WE ENERGY</div>
+    <nav>
+        <a href="welcome.html">Home</a>
+        <a href="viewBill.html">View Bill</a>
+	<a href="registerComplaint.html">Register Complaint</a>
+        <a href="complaintStatus.html">Complaint Status</a>
+        <a href="login.html" class="logout">Logout</a>
+    </nav>
+</header>
+
+<div class="bill-details-container">
+    <h1>Bill Details</h1>
+
+    <label for="userId">Bill No.</label>
+    <input type="text" id="billNumber" readonly>
+
+    <label for="userName">User Name</label>
+    <input type="text" id="customerName" readonly>
+
+    <label for="billingMonth">Billing Month</label>
+    <input type="text" id="billingMonth" value="December 2024" readonly>
+
+    <div class="amount">Total Amount: ₹400</div>
+
+    <label for="paymentMethod">Payment Method</label>
+    <select id="paymentMethod" required>
+        <option value="">Select Payment Method</option>
+        <option value="creditCard">Credit Card</option>
+        <option value="debitCard">Debit Card</option>
+        <option value="netBanking">Net Banking</option>
+        <option value="upi">UPI</option>
+        <option value="cash">Cash</option>
+    </select>
+    <div class="error-message" id="paymentMethodError"></div>
+
+    <button class="btn" onclick="submitPayment()">Pay Now</button>
+    <button class="btn" onclick="goBack()">Back to View Bill</button>
+</div>
+
+<script>
+    // Function to load user data from localStorage
+    function loadUserData() {
+        const registrationData = JSON.parse(localStorage.getItem('registrationData'));
+        if (registrationData) {
+            document.getElementById('billNumber').value = registrationData.billNumber;
+            document.getElementById('customerName').value = registrationData ? registrationData.userId : 'Guest';
+        } else {
+            alert('User data not found. Please log in again.');
+            window.location.href = 'login.html'; // Redirect to login if no user data
+        }
+    }
+
+    function validatePayment() {
+        let isValid = true;
+        clearErrors();
+
+        const paymentMethod = document.getElementById('paymentMethod').value;
+
+        if (!paymentMethod) {
+            showError('paymentMethod', 'Please select a payment method.');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function submitPayment() {
+        if (validatePayment()) {
+            const amount = 400; // Fixed amount for this bill
+            const paymentMethod = document.getElementById('paymentMethod').value;
+	    window.location.href = 'payBill2.html';
+            // Optionally, redirect to a confirmation page or reset the form
+        }
+    }
+
+    function goBack() {
+        window.location.href = 'viewBill.html'; // Redirect to Pay Bill page
+    }
+
+    function showError(elementId, message) {
+        const errorElement = document.getElementById(`${elementId}Error`);
+        errorElement.textContent = message;
+    }
+
+    function clearErrors() {
+        const errorElements = document.querySelectorAll('.error-message');
+        errorElements.forEach(error => error.textContent = '');
+    }
+
+    // Load user data on page load
+    window.onload = loadUserData;
+</script>
+
+</body>
+</html>
