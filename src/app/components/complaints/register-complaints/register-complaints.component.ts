@@ -8,6 +8,17 @@ interface ComplaintType {
   subTypes: string[];
 }
 
+interface ValidationState {
+  isValid: boolean;
+  message: string;
+}
+
+interface ComplaintValidation {
+  title: ValidationState;
+  description: ValidationState;
+  address: ValidationState;
+}
+
 @Component({
   selector: 'app-register-complaints',
   templateUrl: './register-complaints.component.html',
@@ -43,6 +54,19 @@ export class RegisterComplaintsComponent implements OnInit {
   ];
 
   availableSubTypes: string[] = [];
+
+  validationState: ComplaintValidation = {
+    title: { isValid: false, message: '' },
+    description: { isValid: false, message: '' },
+    address: { isValid: false, message: '' }
+  };
+
+  titleMinLength = 5;
+  titleMaxLength = 50;
+  descriptionMinLength = 10;
+  descriptionMaxLength = 250;
+  addressMinLength = 5;
+  addressMaxLength = 100;
 
   constructor(
     private fb: FormBuilder,
@@ -121,6 +145,19 @@ export class RegisterComplaintsComponent implements OnInit {
         subTypeControl?.disable();
         this.availableSubTypes = [];
       }
+    });
+
+    // Add real-time validation subscriptions
+    this.complaintForm.get('problemTitle')?.valueChanges.subscribe(value => {
+      this.validationState.title = this.validateTitle(value);
+    });
+
+    this.complaintForm.get('problemDescription')?.valueChanges.subscribe(value => {
+      this.validationState.description = this.validateDescription(value);
+    });
+
+    this.complaintForm.get('address')?.valueChanges.subscribe(value => {
+      this.validationState.address = this.validateAddress(value);
     });
   }
 
@@ -206,5 +243,84 @@ export class RegisterComplaintsComponent implements OnInit {
   onReset() {
     this.complaintForm.reset();
     this.availableSubTypes = [];
+  }
+
+  validateTitle(value: string): ValidationState {
+    if (!value) {
+      return { isValid: false, message: 'Title is required' };
+    }
+    if (value.length < this.titleMinLength) {
+      return { 
+        isValid: false, 
+        message: `Title must be at least ${this.titleMinLength} characters` 
+      };
+    }
+    if (value.length > this.titleMaxLength) {
+      return { 
+        isValid: false, 
+        message: `Title cannot exceed ${this.titleMaxLength} characters` 
+      };
+    }
+    if (!/^[a-zA-Z0-9\s,.!?-]+$/.test(value)) {
+      return { 
+        isValid: false, 
+        message: 'Title can only contain letters, numbers, and basic punctuation' 
+      };
+    }
+    return { isValid: true, message: '' };
+  }
+
+  validateDescription(value: string): ValidationState {
+    if (!value) {
+      return { isValid: false, message: 'Description is required' };
+    }
+    if (value.length < this.descriptionMinLength) {
+      return { 
+        isValid: false, 
+        message: `Description must be at least ${this.descriptionMinLength} characters` 
+      };
+    }
+    if (value.length > this.descriptionMaxLength) {
+      return { 
+        isValid: false, 
+        message: `Description cannot exceed ${this.descriptionMaxLength} characters` 
+      };
+    }
+    return { isValid: true, message: '' };
+  }
+
+  validateAddress(value: string): ValidationState {
+    if (!value) {
+      return { isValid: false, message: 'Address is required' };
+    }
+    if (value.length < this.addressMinLength) {
+      return { 
+        isValid: false, 
+        message: `Address must be at least ${this.addressMinLength} characters` 
+      };
+    }
+    if (value.length > this.addressMaxLength) {
+      return { 
+        isValid: false, 
+        message: `Address cannot exceed ${this.addressMaxLength} characters` 
+      };
+    }
+    return { isValid: true, message: '' };
+  }
+
+  getRemainingChars(field: string): number {
+    const control = this.complaintForm.get(field);
+    if (!control) return 0;
+    
+    switch(field) {
+      case 'problemTitle':
+        return this.titleMaxLength - (control.value?.length || 0);
+      case 'problemDescription':
+        return this.descriptionMaxLength - (control.value?.length || 0);
+      case 'address':
+        return this.addressMaxLength - (control.value?.length || 0);
+      default:
+        return 0;
+    }
   }
 }

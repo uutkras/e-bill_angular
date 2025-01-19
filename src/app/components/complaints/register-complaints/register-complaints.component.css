@@ -40,6 +40,7 @@ h2 {
 .form-group {
   flex: 1;
   margin-bottom: 20px;
+  position: relative;
 }
 
 label {
@@ -202,4 +203,38 @@ input:focus, select:focus, textarea:focus {
     flex-direction: column;
     gap: 0;
   }
+}
+
+.validation-feedback {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 20px;
+  margin-top: 5px;
+}
+
+.char-count {
+  font-size: 12px;
+  color: #666;
+}
+
+.char-count.warning {
+  color: #ffc107;
+}
+
+input.valid, textarea.valid {
+  border-color: #28a745;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+input.invalid, textarea.invalid {
+  border-color: #dc3545;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
 }

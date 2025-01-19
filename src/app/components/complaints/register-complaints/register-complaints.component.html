@@ -123,9 +123,16 @@
           <label for="problemTitle">Problem Title</label>
           <input type="text" 
                  id="problemTitle" 
-                 formControlName="problemTitle">
-          <div class="error" *ngIf="getErrorMessage('problemTitle')">
-            {{ getErrorMessage('problemTitle') }}
+                 formControlName="problemTitle"
+                 [class.valid]="validationState.title.isValid"
+                 [class.invalid]="!validationState.title.isValid && complaintForm.get('problemTitle')?.touched">
+          <div class="validation-feedback">
+            <div class="error" *ngIf="!validationState.title.isValid && complaintForm.get('problemTitle')?.touched">
+              {{ validationState.title.message }}
+            </div>
+            <div class="char-count" [class.warning]="getRemainingChars('problemTitle') < 10">
+              {{ getRemainingChars('problemTitle') }} characters remaining
+            </div>
           </div>
         </div>
 
@@ -133,9 +140,35 @@
           <label for="problemDescription">Problem Description</label>
           <textarea id="problemDescription" 
                     formControlName="problemDescription" 
-                    rows="4"></textarea>
-          <div class="error" *ngIf="getErrorMessage('problemDescription')">
-            {{ getErrorMessage('problemDescription') }}
+                    rows="4"
+                    [class.valid]="validationState.description.isValid"
+                    [class.invalid]="!validationState.description.isValid && complaintForm.get('problemDescription')?.touched">
+          </textarea>
+          <div class="validation-feedback">
+            <div class="error" *ngIf="!validationState.description.isValid && complaintForm.get('problemDescription')?.touched">
+              {{ validationState.description.message }}
+            </div>
+            <div class="char-count" [class.warning]="getRemainingChars('problemDescription') < 20">
+              {{ getRemainingChars('problemDescription') }} characters remaining
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address</label>
+          <textarea id="address" 
+                    formControlName="address" 
+                    rows="3"
+                    [class.valid]="validationState.address.isValid"
+                    [class.invalid]="!validationState.address.isValid && complaintForm.get('address')?.touched">
+          </textarea>
+          <div class="validation-feedback">
+            <div class="error" *ngIf="!validationState.address.isValid && complaintForm.get('address')?.touched">
+              {{ validationState.address.message }}
+            </div>
+            <div class="char-count" [class.warning]="getRemainingChars('address') < 15">
+              {{ getRemainingChars('address') }} characters remaining
+            </div>
           </div>
         </div>
       </div>
