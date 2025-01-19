@@ -1,0 +1,56 @@
+<div class="complaint-container">
+  <h2>Register Complaint</h2>
+  
+  <form [formGroup]="complaintForm" (ngSubmit)="onSubmit()" novalidate>
+    <!-- Add this at the top of the form -->
+    <div class="complaint-for-section">
+      <label class="section-label">Register Complaint For:</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" 
+                 id="self" 
+                 value="self" 
+                 formControlName="complaintFor">
+          <label for="self">Self</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" 
+                 id="other" 
+                 value="other" 
+                 formControlName="complaintFor">
+          <label for="other">Someone Else</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Details Section -->
+    <div class="user-details-section">
+      <h3>User Details</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="userId">User ID</label>
+          <input type="text" 
+                 id="userId" 
+                 formControlName="userId"
+                 [readonly]="complaintForm.get('complaintFor')?.value === 'self'">
+          <div class="error" *ngIf="getErrorMessage('userId')">
+            {{ getErrorMessage('userId') }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="userName">User Name</label>
+          <input type="text" 
+                 id="userName" 
+                 formControlName="userName"
+                 [readonly]="complaintForm.get('complaintFor')?.value === 'self'">
+          <div class="error" *ngIf="getErrorMessage('userName')">
+            {{ getErrorMessage('userName') }}
+          </div>
+        </div>
+      </div>
+
+      <!-- ... rest of the existing form ... -->
+    </div>
+  </form>
+</div> 

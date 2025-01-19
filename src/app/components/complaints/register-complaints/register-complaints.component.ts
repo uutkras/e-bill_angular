@@ -16,6 +16,8 @@ interface ComplaintType {
 export class RegisterComplaintsComponent implements OnInit {
   complaintForm!: FormGroup;
   customerName: string = '';
+  complaintFor: 'self' | 'other' = 'self';
+  currentUser: any = null;
 
   complaintTypes: ComplaintType[] = [
     {
@@ -49,12 +51,12 @@ export class RegisterComplaintsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const currentUser = this.authService.getCurrentUser();
-    if (!currentUser) {
+    this.currentUser = this.authService.getCurrentUser();
+    if (!this.currentUser) {
       this.router.navigate(['/login']);
       return;
     }
-    this.customerName = currentUser.customerName || 'Guest';
+    this.customerName = this.currentUser.customerName || 'Guest';
     this.initForm();
   }
 
@@ -62,14 +64,9 @@ export class RegisterComplaintsComponent implements OnInit {
     this.complaintForm = this.fb.group({
       complaintType: ['', Validators.required],
       subType: [{ value: '', disabled: true }, Validators.required],
-      userId: [{ 
-        value: this.authService.getCurrentUser()?.userId || '', 
-        disabled: true 
-      }, Validators.required],
-      userName: [{ 
-        value: this.customerName, 
-        disabled: true 
-      }, [
+      complaintFor: ['self', Validators.required],
+      userId: ['', Validators.required],
+      userName: ['', [
         Validators.required,
         Validators.pattern('^[a-zA-Z ]{2,50}$')
       ]],
@@ -84,21 +81,34 @@ export class RegisterComplaintsComponent implements OnInit {
       address: ['', [
         Validators.required,
         Validators.minLength(5),
-        Validators.maxLength(100),
-        Validators.pattern('^[a-zA-Z0-9\\s,.-]{5,100}$')
+        Validators.maxLength(100)
       ]],
       problemTitle: ['', [
         Validators.required,
         Validators.minLength(5),
-        Validators.maxLength(50),
-        Validators.pattern('^[a-zA-Z0-9\\s,.!?-]{5,50}$')
+        Validators.maxLength(50)
       ]],
       problemDescription: ['', [
         Validators.required,
         Validators.minLength(10),
-        Validators.maxLength(250),
-        Validators.pattern('^[a-zA-Z0-9\\s,.!?-]{10,250}$')
+        Validators.maxLength(250)
       ]]
+    });
+
+    // Fill form with user details if complaining for self
+    if (this.currentUser) {
+      this.fillUserDetails();
+    }
+
+    // Listen for complaintFor changes
+    this.complaintForm.get('complaintFor')?.valueChanges.subscribe(value => {
+      if (value === 'self' && this.currentUser) {
+        this.fillUserDetails();
+        this.disableUserFields();
+      } else {
+        this.enableUserFields();
+        this.clearUserFields();
+      }
     });
 
     // Enable/disable subType based on complaintType selection
@@ -111,6 +121,33 @@ export class RegisterComplaintsComponent implements OnInit {
         subTypeControl?.disable();
         this.availableSubTypes = [];
       }
+    });
+  }
+
+  fillUserDetails() {
+    this.complaintForm.patchValue({
+      userId: this.currentUser.userId,
+      userName: this.currentUser.customerName,
+      billNumber: this.currentUser.billNumber,
+      mobileNumber: this.currentUser.mobileNumber
+    });
+  }
+
+  disableUserFields() {
+    ['userId', 'userName', 'billNumber', 'mobileNumber'].forEach(field => {
+      this.complaintForm.get(field)?.disable();
+    });
+  }
+
+  enableUserFields() {
+    ['userId', 'userName', 'billNumber', 'mobileNumber'].forEach(field => {
+      this.complaintForm.get(field)?.enable();
+    });
+  }
+
+  clearUserFields() {
+    ['userId', 'userName', 'billNumber', 'mobileNumber'].forEach(field => {
+      this.complaintForm.get(field)?.setValue('');
     });
   }
 

@@ -25,18 +25,13 @@
       </div>
 
       <div class="form-group">
-        <label for="billNumber">Bill Number</label>
+        <label for="billNumber">Bill Number (Auto-generated)</label>
         <input 
           type="text" 
           id="billNumber" 
           formControlName="billNumber"
-          maxlength="5">
-        <div class="remaining" id="billNumberRemaining">
-          {{5 - (registerForm.get('billNumber')?.value?.length || 0)}} digits remaining
-        </div>
-        <div class="error" *ngIf="registerForm.get('billNumber')?.touched && registerForm.get('billNumber')?.errors">
-          {{ getErrorMessage('billNumber') }}
-        </div>
+          readonly>
+        <div class="hint">Last 5 digits of Consumer ID</div>
       </div>
 
       <div class="btn">
@@ -65,9 +60,17 @@
         <input 
           type="email" 
           id="email" 
-          formControlName="email">
-        <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
-          {{ getErrorMessage('email') }}
+          formControlName="email"
+          [class.valid]="emailValidation.isValid"
+          [class.invalid]="registerForm.get('email')?.touched && !emailValidation.isValid">
+        
+        <div class="email-validation" *ngIf="registerForm.get('email')?.value">
+          <ul class="validation-requirements">
+            <li *ngFor="let message of getEmailValidationMessages()" 
+                [class.met]="!getEmailValidationMessages().includes(message)">
+              {{ message }}
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -115,10 +118,17 @@
           type="password" 
           id="password" 
           formControlName="password"
-          minlength="8"
-          maxlength="30">
-        <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
-          {{ getErrorMessage('password') }}
+          [class.valid]="registerForm.get('password')?.valid"
+          [class.invalid]="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+        
+        <div class="password-strength" *ngIf="registerForm.get('password')?.value">
+          <div class="strength-bar" [style.background-color]="getPasswordStrengthColor()"></div>
+          <ul class="strength-requirements">
+            <li *ngFor="let message of getPasswordStrengthMessage()" 
+                [class.met]="!getPasswordStrengthMessage().includes(message)">
+              {{ message }}
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -137,9 +147,28 @@
 
       <div class="btn">
         <button type="button" (click)="prevStep()">Back</button>
-        <button type="submit" [disabled]="!registerForm.valid">Register</button>
+        <button type="submit" 
+                [disabled]="!isStep3Valid()" 
+                class="submit-btn">
+          Register
+        </button>
         <button type="button" class="reset" (click)="resetForm()">Reset</button>
       </div>
     </div>
   </form>
+
+  <!-- Add this after the form closing tag but before the container closing div -->
+  <div class="login-link">
+    Already have an account? <a routerLink="/login">Login here</a>
+  </div>
+
+  <!-- Add this right before the error message
+  <div class="divider">
+    <span>or</span>
+  </div> -->
+
+  <!-- Add error message for registration failure -->
+  <div class="error-message" *ngIf="registrationError">
+    Registration failed. Please try again or contact support.
+  </div>
 </div>

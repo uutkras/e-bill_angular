@@ -2,11 +2,15 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 interface User {
-  userId: string;
+  consumerId: string;
+  billNumber: string;
   customerName: string;
   email: string;
+  countryCode: string;
   mobileNumber: string;
+  userId: string;
   password?: string;
+  registeredAt?: string;
   isAdmin?: boolean;
 }
 
@@ -58,19 +62,29 @@ export class AuthService {
 
   register(user: User): Observable<boolean> {
     try {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const users: User[] = JSON.parse(localStorage.getItem('users') || '[]');
       
       // Check if user already exists
       const userExists = users.some((u: User) => 
-        u.userId === user.userId || u.email === user.email
+        u.userId === user.userId || 
+        u.email === user.email || 
+        u.consumerId === user.consumerId ||
+        u.mobileNumber === user.mobileNumber
       );
 
       if (userExists) {
+        console.error('User already exists');
         return of(false);
       }
 
+      // Add new user
       users.push(user);
       localStorage.setItem('users', JSON.stringify(users));
+      
+      // Log the registration for debugging
+      console.log('Registration successful:', user);
+      console.log('Updated users:', users);
+      
       return of(true);
     } catch (error) {
       console.error('Registration error:', error);
@@ -79,8 +93,15 @@ export class AuthService {
   }
 
   getCurrentUser(): User | null {
-    const user = localStorage.getItem('currentUser');
-    return user ? JSON.parse(user) : null;
+    const userStr = localStorage.getItem('currentUser');
+    if (!userStr) return null;
+    
+    try {
+      return JSON.parse(userStr);
+    } catch (error) {
+      console.error('Error parsing current user:', error);
+      return null;
+    }
   }
 
   isAdmin(): boolean {
@@ -90,5 +111,11 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('currentUser');
+  }
+
+  // Helper method to check registration status
+  checkRegistrationStatus(): void {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    console.log('Current registered users:', users);
   }
 }

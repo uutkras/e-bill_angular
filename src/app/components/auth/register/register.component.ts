@@ -3,6 +3,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
+interface EmailValidation {
+  isValid: boolean;
+  hasAtSymbol: boolean;
+  hasDomain: boolean;
+  hasValidFormat: boolean;
+}
+
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -12,6 +19,19 @@ export class RegisterComponent {
   registerForm: FormGroup;
   currentStep = 1;
   registrationError = false;
+  passwordStrength = {
+    hasUpperCase: false,
+    hasLowerCase: false,
+    hasNumber: false,
+    hasSpecialChar: false,
+    hasMinLength: false
+  };
+  emailValidation: EmailValidation = {
+    isValid: false,
+    hasAtSymbol: false,
+    hasDomain: false,
+    hasValidFormat: false
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -24,10 +44,7 @@ export class RegisterComponent {
         Validators.required,
         Validators.pattern('^[0-9]{13}$')
       ]],
-      billNumber: ['', [
-        Validators.required,
-        Validators.pattern('^[0-9]{5}$')
-      ]],
+      billNumber: [{ value: '', disabled: true }],
 
       // Step 2
       customerName: ['', [
@@ -58,6 +75,47 @@ export class RegisterComponent {
         Validators.required
       ]]
     }, { validator: this.passwordMatchValidator });
+
+    this.registerForm.get('consumerId')?.valueChanges.subscribe(value => {
+      if (value && value.length === 13) {
+        const last5Digits = value.slice(-5);
+        this.registerForm.patchValue({
+          billNumber: last5Digits
+        });
+      } else {
+        this.registerForm.patchValue({
+          billNumber: ''
+        });
+      }
+    });
+
+    this.registerForm.get('password')?.valueChanges.subscribe(password => {
+      this.passwordStrength = {
+        hasUpperCase: /[A-Z]/.test(password),
+        hasLowerCase: /[a-z]/.test(password),
+        hasNumber: /[0-9]/.test(password),
+        hasSpecialChar: /[@$!%*?&]/.test(password),
+        hasMinLength: password.length >= 8
+      };
+    });
+
+    this.registerForm.get('email')?.valueChanges.subscribe(email => {
+      this.emailValidation = {
+        hasAtSymbol: email.includes('@'),
+        hasDomain: email.includes('.') && email.split('.')[1]?.length >= 2,
+        hasValidFormat: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email),
+        isValid: this.registerForm.get('email')?.valid || false
+      };
+    });
+
+    Object.keys(this.registerForm.controls).forEach(key => {
+      const control = this.registerForm.get(key);
+      control?.valueChanges.subscribe(() => {
+        if (control.value) {
+          control.markAsTouched();
+        }
+      });
+    });
   }
 
   passwordMatchValidator(g: FormGroup) {
@@ -67,8 +125,7 @@ export class RegisterComponent {
 
   isStep1Valid(): boolean {
     const consumerId = this.registerForm.get('consumerId');
-    const billNumber = this.registerForm.get('billNumber');
-    return consumerId?.valid && billNumber?.valid || false;
+    return consumerId?.valid || false;
   }
 
   isStep2Valid(): boolean {
@@ -76,6 +133,17 @@ export class RegisterComponent {
     const email = this.registerForm.get('email');
     const mobileNumber = this.registerForm.get('mobileNumber');
     return customerName?.valid && email?.valid && mobileNumber?.valid || false;
+  }
+
+  isStep3Valid(): boolean {
+    const userId = this.registerForm.get('userId');
+    const password = this.registerForm.get('password');
+    const confirmPassword = this.registerForm.get('confirmPassword');
+    
+    return userId?.valid && 
+           password?.valid && 
+           confirmPassword?.valid && 
+           !this.registerForm.hasError('mismatch') || false;
   }
 
   nextStep() {
@@ -133,22 +201,72 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
+      console.log('Form is valid, attempting registration...');
+      
+      // Get the raw value including disabled controls
       const formData = {
-        ...this.registerForm.value,
+        ...this.registerForm.getRawValue(),
         registeredAt: new Date().toISOString(),
         isAdmin: false
       };
       delete formData.confirmPassword;
 
-      this.authService.register(formData).subscribe(
-        success => {
+      console.log('Registration data:', formData);
+
+      this.authService.register(formData).subscribe({
+        next: (success) => {
+          console.log('Registration response:', success);
           if (success) {
+            console.log('Registration successful, navigating to acknowledgement...');
             this.router.navigate(['/acknowledgement']);
           } else {
+            console.error('Registration failed');
             this.registrationError = true;
           }
+        },
+        error: (error) => {
+          console.error('Registration error:', error);
+          this.registrationError = true;
         }
-      );
+      });
+    } else {
+      console.log('Form is invalid');
+      // Mark all fields as touched to trigger validation messages
+      Object.keys(this.registerForm.controls).forEach(key => {
+        const control = this.registerForm.get(key);
+        control?.markAsTouched();
+      });
     }
+  }
+
+  getPasswordStrengthMessage(): string[] {
+    const messages: string[] = [];
+    const strength = this.passwordStrength;
+
+    if (!strength.hasMinLength) messages.push('At least 8 characters');
+    if (!strength.hasUpperCase) messages.push('At least one uppercase letter');
+    if (!strength.hasLowerCase) messages.push('At least one lowercase letter');
+    if (!strength.hasNumber) messages.push('At least one number');
+    if (!strength.hasSpecialChar) messages.push('At least one special character (@$!%*?&)');
+
+    return messages;
+  }
+
+  getPasswordStrengthColor(): string {
+    const strength = Object.values(this.passwordStrength).filter(Boolean).length;
+    if (strength === 5) return '#28a745'; // Strong
+    if (strength >= 3) return '#ffc107'; // Medium
+    return '#dc3545'; // Weak
+  }
+
+  getEmailValidationMessages(): string[] {
+    const messages: string[] = [];
+    const validation = this.emailValidation;
+
+    if (!validation.hasAtSymbol) messages.push('Must contain @ symbol');
+    if (!validation.hasDomain) messages.push('Must have a valid domain');
+    if (!validation.hasValidFormat) messages.push('Must be a valid email format');
+
+    return messages;
   }
 }
